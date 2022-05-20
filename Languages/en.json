@@ -1,0 +1,22 @@
+{
+    "invoice" : "Invoice",
+    "items" : "Items",
+    "price" : "Price",
+    "total" : "Total",
+    "invoicedate": "Invoice date",
+    "clientid":"Client ID",
+    "invoiceid":"Invoice ID",
+    "totalamount":"Total Amount",
+    "duedate":"Payment due date",
+    "receipt":"Receipt",
+    "payableto":"Account / Payable to",
+    "reference":"Reference",
+    "payableby":"Payable by",
+    "currency":"Currency",
+    "amount":"Amount",
+    "acceptance":"Acceptance point",
+    "paymentpart":"Payment part",
+    "additionalinformation":"Additional Information",
+    "subtotal":"Subtotal",
+    "dummy":"DO NOT USE FOR PAYMENT"
+}

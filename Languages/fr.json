@@ -1,0 +1,22 @@
+{
+    "invoice" : "Facture",
+    "items" : "Objets",
+    "price" : "Prix",
+    "total" : "Total",
+    "invoicedate": "Date de facturation",
+    "clientid":"Client",
+    "invoiceid":"Facture N°",
+    "totalamount":"Montant dû",
+    "duedate":"Délai de paiement",
+    "receipt":"Récépissé",
+    "payableto":"Compte / Payable à",
+    "reference":"Référence",
+    "payableby":"Payable par",
+    "currency":"Monnaie",
+    "amount":"Quantité",
+    "acceptance":"Point de dépôt",
+    "paymentpart":"Section paiement",
+    "additionalinformation":"Information supplémentaires",
+    "subtotal":"Sous-total",
+    "dummy":"NE PAS UTILISER POUR LE PAIEMENT"
+}

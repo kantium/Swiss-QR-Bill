@@ -1,0 +1,15 @@
+{   
+    "invoice": {
+        "invoiceid": "220506-522",
+        "duedays": 60,
+        "currency": "CHF",
+        "reference":"21 00000 00003 13947 14300 09017",
+        "information":"Invoice 220506-522"
+    }, 
+    "items": [
+        {"name":"Saucisson au Beaufort", "amount": 1, "price": 7.50},
+        {"name":"Chocolat Villars", "amount": 3, "price": 5.80},
+        {"name":"Fondue 100% Vacherin", "amount": 0.4, "price": 25},
+        {"name":"Fendant Valaisan", "amount": 2, "price": 15}
+    ]
+}
