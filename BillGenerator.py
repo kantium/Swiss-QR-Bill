@@ -9,8 +9,6 @@ import argparse
 
 from datetime import date, timedelta
 
-# Invoice --from customer01.json --to me.json --data purchase02.json --language fr
-
 def set_background(cr, page_width, page_height, background_path):
 
     image_surface = cairo.ImageSurface.create_from_png(background_path)
@@ -31,6 +29,7 @@ def set_background(cr, page_width, page_height, background_path):
     cr.paint()
     cr.restore()
 
+
 def print_qrcode(cr, qr_value, x, y):
 
     qr_size = 130
@@ -40,7 +39,6 @@ def print_qrcode(cr, qr_value, x, y):
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_M,
-        #error_correction=qrcode.constants.ERROR_CORRECT_L,
         box_size=10,
         border=0,
     )
@@ -90,6 +88,7 @@ def print_qrcode(cr, qr_value, x, y):
     cr.rectangle(cross_pos+x+8.5, cross_pos+y+4.5, 3.3, 11)
     cr.fill()
 
+
 def print_headers(cr): 
 
     cr.set_font_size(30)
@@ -138,8 +137,6 @@ def print_headers(cr):
     cr.show_text(debtor_data["l1"])
     cr.move_to(310, 185)
     cr.show_text(debtor_data["l2"])
-    #cr.move_to(310, 190)
-    #cr.show_text("Genève")
     cr.move_to(310, 200)
     cr.show_text(debtor_data["l3"])
     cr.move_to(310, 215)
@@ -159,22 +156,19 @@ def print_company_logo(cr, logo_path):
     cr.move_to(120, 50)
     cr.show_text(creditor_data["company"])
 
+
 def print_table(cr):
 
     cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
     cr.set_source_rgb(0.3, 0.3, 0.3)
+
     cr.set_font_size(10)
     cr.move_to(40, 270)
     cr.show_text(language_data["items"])
-
-    cr.set_font_size(10)
     cr.move_to(330, 270)
     cr.show_text(language_data["amount"])
-
-    cr.set_font_size(10)
     cr.move_to(390, 270)
     cr.show_text(language_data["price"])
-
     cr.move_to(470, 270)
     cr.show_text(language_data["total"] + " (" + invoice_data["invoice"]["currency"] + ")")
 
@@ -194,18 +188,13 @@ def print_table(cr):
         cr.set_font_size(10)
         cr.move_to(330, 270+index*25)
         cr.show_text("{: .2f}".format(item["amount"]))
-
-        cr.set_font_size(10)
         cr.move_to(390, 270+index*25)
-        #cr.show_text("|{:X<10.2f}|".format(item["price"]))
         cr.show_text("{0:,.2f}".format(item["price"]).replace(","," "))
 
         cr.set_source_rgb(0.1, 0.1, 0.1)
         cr.set_font_size(12)
         cr.move_to(470, 270+index*25)
         cr.show_text("{0:,.2f}".format(item["amount"]*item["price"]).replace(","," "))
-        #cr.move_to(100, 750+index*25)
-        #cr.show_text("{0} Qtx: {1: <20}  Price: {2} Total: {3}".format(item["name"],item["amount"],item["price"],item["amount"]*item["price"]))
 
     cr.set_line_width(0.5)
     cr.move_to(40, 282+(len(invoice_data["items"]))*25)
@@ -216,9 +205,7 @@ def print_table(cr):
     cr.set_font_size(12)
     cr.move_to(40, 277+(len(invoice_data["items"])+1)*25)
     cr.show_text(language_data["subtotal"])
-
     cr.set_source_rgb(0.1, 0.1, 0.1)
-    cr.set_font_size(12)
     cr.move_to(470, 277+(len(invoice_data["items"])+1)*25)
     cr.show_text(invoice_data["totalamounttxt"])
 
@@ -266,56 +253,44 @@ def print_receipt(cr, page_width, page_height, debug_mode):
     cr.select_font_face("Arimo", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
     if debug_mode:
         cr.set_source_rgb(0.7, 0.3, 0.7)
+    
     cr.set_font_size(8)
     cr.move_to(14, 592)
     cr.show_text(creditor_data["iban"])
-    cr.set_font_size(8)
     cr.move_to(14, 601)
     cr.show_text(creditor_data["l1"])
-    cr.set_font_size(8)
     cr.move_to(14, 610)
     cr.show_text(creditor_data["l2"])
-    cr.set_font_size(8)
     cr.move_to(14, 619)
     cr.show_text(creditor_data["l3"])
-    cr.set_font_size(8)
     cr.move_to(14, 628)
     cr.show_text(creditor_data["l4"])
-
 
     cr.set_font_size(8)
     cr.move_to(14, 675)
     cr.show_text(debtor_data["l1"])
-    cr.set_font_size(8)
     cr.move_to(14, 684)
     cr.show_text(debtor_data["l2"])
-    cr.set_font_size(8)
     cr.move_to(14, 693)
     cr.show_text(debtor_data["l3"])
-    cr.set_font_size(8)
     cr.move_to(14, 702)
     cr.show_text(debtor_data["l4"])
 
     cr.set_font_size(8)
     cr.move_to(14, 752)
     cr.show_text(invoice_data["invoice"]["currency"])
-    cr.set_font_size(8)
     cr.move_to(48, 752)
     cr.show_text(invoice_data["totalamounttxt"])
 
     cr.set_font_size(10)
     cr.move_to(334, 575)
     cr.show_text(creditor_data["iban"])
-    cr.set_font_size(10)
     cr.move_to(334, 586)
     cr.show_text(creditor_data["l1"])
-    cr.set_font_size(10)
     cr.move_to(334, 597)
     cr.show_text(creditor_data["l2"])
-    cr.set_font_size(10)
     cr.move_to(334, 608)
     cr.show_text(creditor_data["l3"])
-    cr.set_font_size(10)
     cr.move_to(334, 619)
     cr.show_text(creditor_data["l4"])
 
@@ -327,8 +302,6 @@ def print_receipt(cr, page_width, page_height, debug_mode):
         cr.set_font_size(8)
         cr.move_to(14, 647)
         cr.show_text(invoice_data["invoice"]["reference"])
-        
-        cr.set_font_size(8)
         cr.move_to(334, 632)
         cr.show_text(language_data["reference"])
 
@@ -336,28 +309,19 @@ def print_receipt(cr, page_width, page_height, debug_mode):
         cr.move_to(14, 638)
         cr.show_text(language_data["reference"])
 
-
     cr.set_font_size(10)
     cr.move_to(334, 677)
     cr.show_text(invoice_data["invoice"]["information"])
-    
-    cr.set_font_size(10)
     cr.move_to(334, 732)
     cr.show_text(debtor_data["l1"])
-    cr.set_font_size(10)
     cr.move_to(334, 743)
     cr.show_text(debtor_data["l2"])
-    cr.set_font_size(10)
     cr.move_to(334, 754)
     cr.show_text(debtor_data["l3"])
-    cr.set_font_size(10)
     cr.move_to(334, 765)
     cr.show_text(debtor_data["l4"])
-
-    cr.set_font_size(10)
     cr.move_to(189.5, 756)
     cr.show_text(invoice_data["invoice"]["currency"])
-    cr.set_font_size(10)
     cr.move_to(229, 756)
     cr.show_text(invoice_data["totalamounttxt"])
 
@@ -368,52 +332,34 @@ def print_receipt(cr, page_width, page_height, debug_mode):
     cr.set_font_size(11)
     cr.move_to(14, 567)
     cr.show_text(language_data["receipt"])
+    cr.move_to(189.5, 567)
+    cr.show_text(language_data["paymentpart"])
 
     cr.set_font_size(6)
     cr.move_to(14, 583)
     cr.show_text(language_data["payableto"])
-
-    cr.set_font_size(6)
     cr.move_to(14, 666)
     cr.show_text(language_data["payableby"])
-
-    cr.set_font_size(6)
     cr.move_to(14, 742)
     cr.show_text(language_data["currency"])
-
-    cr.set_font_size(6)
     cr.move_to(48, 742)
     cr.show_text(language_data["amount"])
-
-    cr.set_font_size(6)
     cr.move_to(112, 781)
     cr.show_text(language_data["acceptance"])
-
-    cr.set_font_size(11)
-    cr.move_to(189.5, 567)
-    cr.show_text(language_data["paymentpart"])
 
     cr.set_font_size(8)
     cr.move_to(334, 565)
     cr.show_text(language_data["payableto"])
-    
-    cr.set_font_size(8)
     cr.move_to(334, 666)
     cr.show_text(language_data["additionalinformation"])
-
-    cr.set_font_size(8)
     cr.move_to(334, 722)
     cr.show_text(language_data["payableby"])
-
-    cr.set_font_size(8)
     cr.move_to(189.5, 743)
     cr.show_text(language_data["currency"])
-
-    cr.set_font_size(8)
     cr.move_to(229, 743)
     cr.show_text(language_data["amount"])
 
-
+# In debug mode, print C5 Envelop lines
 def print_paper_cut(cr, page_width, page_height):
     cr.set_source_rgb(0.7, 1, 0.7)
     cr.set_line_width(0.5)
@@ -442,6 +388,7 @@ def print_paper_cut(cr, page_width, page_height):
     cr.line_to(543, 239) 
     cr.stroke()
 
+# QR Data Generation 
 def gen_qr_data():
     spc = [None] * 31
     spc[0] = "SPC"
@@ -462,8 +409,8 @@ def gen_qr_data():
     spc[15] = ""
     spc[16] = ""
     spc[17] = ""
-    spc[18] = str(invoice_data["totalamount"]) # 11111.25
-    spc[19] = invoice_data["invoice"]["currency"] # CHF ou EUR seulement
+    spc[18] = str(invoice_data["totalamount"])
+    spc[19] = invoice_data["invoice"]["currency"]
     spc[20] = "K"
     spc[21] = debtor_data["name"]
     spc[22] = debtor_data["address1"]
@@ -471,14 +418,11 @@ def gen_qr_data():
     spc[24] = ""
     spc[25] = ""
     spc[26] = "CH"
-    spc[27] = "NON" # QRR (avec numéro de référence valide) ou NON (sans référence)
-    #Reference : len = 27, digit only, CRC mod 10 sur char 27
-    spc[28] = "" #invoice_data["invoice"]["reference"].replace(" ", "")
-    # information supplémentaire max 140 chars
-    spc[29] = invoice_data["invoice"]["information"].strip()
+    spc[27] = invoice_data["invoice"]["ref_type"] 
+    spc[28] = invoice_data["invoice"]["reference"].replace(" ", "")
+    spc[29] = invoice_data["invoice"]["information"]
     spc[30] = "EPD"
 
-    #print("\n".join(spc))
     return "\n".join(spc)
 
 
@@ -495,11 +439,20 @@ def main(debug_mode):
     
     invoice_data["totalamount"] = round(sum([x["amount"]*x["price"] for x in invoice_data["items"]]),2)
     invoice_data["totalamounttxt"] = "{:,.2f}".format(invoice_data["totalamount"]).replace(","," ")
-    
+    assert(invoice_data["totalamount"] > 0)
+
     if debug_mode:
         invoice_data["totalamount"] = 0.00
         invoice_data["totalamounttxt"] = "0.00"
         invoice_data["invoice"]["information"] = language_data["dummy"]
+    
+    if invoice_data["invoice"]["reference"].strip() != "":
+        invoice_data["invoice"]["reference"] = invoice_data["invoice"]["reference"].strip()
+        invoice_data["invoice"]["ref_type"] = "QRR"
+        assert(len(invoice_data["invoice"]["reference"].replace(" ", "")) == 27)
+    else:
+        invoice_data["invoice"]["ref_type"] = "NON"
+        invoice_data["invoice"]["reference"] = ""
 
     invoice_data["today"] = date.today()
     invoice_data["todaytxt"] = date.strftime(invoice_data["today"], "%d.%m.%y")
@@ -508,14 +461,11 @@ def main(debug_mode):
     
     assert(len(invoice_data["invoice"]["information"]) < 140)
     assert(invoice_data["invoice"]["currency"] == "CHF" or invoice_data["invoice"]["currency"] == "EUR")
-    #other checks
-    # IBAN correct (checksum)
-    # adresse sur deux lines
-    # due date > aujourd'hui
-    # amount != 0 sauf debug
-    # reference number is checksum valid, 27 digit, numbers only and QRR is set
-    # Receiver country and customer country == ISO Code (CH)
-    # Nom, address1, address2 max 70 chars
+    
+    assert(len(debtor_data["address1"]) <= 70)
+    assert(len(debtor_data["address2"]) <= 70)
+    assert(len(creditor_data["address1"]) <= 70)
+    assert(len(creditor_data["address1"]) <= 70)
 
     ps = cairo.PDFSurface(output_path, page_width, page_height)
     cr = cairo.Context(ps)
@@ -525,7 +475,6 @@ def main(debug_mode):
         print_paper_cut(cr, page_width, page_height)
 
     print_table(cr)
-
     print_headers(cr)
 
     if debug_mode:

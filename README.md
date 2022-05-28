@@ -38,10 +38,14 @@ Three JSON files need to be customized for your needs, these files are located i
 
 ## Features
 
-- [x] Invoice
+- [x] PDF Invoice generation
 - [x] Languages (FR/EN)
-- [x] QR-Bill without reference number
-- [ ] QR-IBAN and QR
+- [x] Without Reference number (NON)
+- [x] With Reference number (QRR)
+- [ ] Structured Address
+- [ ] IBAN and Reference number checksum
+- [ ] German translation
+- [ ] ISO Country Code check
 
 ## Documentation
 
