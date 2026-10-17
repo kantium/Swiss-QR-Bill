@@ -1,10 +1,12 @@
 {
     "company":  "",
     "name":     "Robert Schneider AG",
-    "address1": "Rue du Lac 1268",
-    "address2": "2501 Biel",
-    "country":  "Switzerland",
+    "street":   "Rue du Lac",
+    "house_number": "1268",
+    "postal_code": "2501",
+    "town":     "Biel",
+    "country":  "CH",
     "email":  "finance@schneider.ch",
     "tel": "Tel: +41 (0)75 555 55 55",
     "iban":"CH44 3199 9123 0008 8901 2"
-} 
+}
