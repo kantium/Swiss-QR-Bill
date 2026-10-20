@@ -388,20 +388,26 @@ def print_paper_cut(cr, page_width, page_height):
     cr.line_to(543, 239) 
     cr.stroke()
 
-# QR Data Generation 
+def street_line(party):
+    return (party["street"] + " " + party["house_number"]).strip()
+
+def town_line(party):
+    return party["postal_code"] + " " + party["town"]
+
+# QR Data Generation
 def gen_qr_data():
     spc = [None] * 31
     spc[0] = "SPC"
     spc[1] = "0200"
     spc[2] = "1"
     spc[3] = creditor_data["iban"].replace(" ", "")
-    spc[4] = "K" # K = Adresse sur deux lignes, S = Addresse structurée (4 lignes voir doc)
+    spc[4] = "S" # S = structured address (K = combined address, no longer allowed since IG v2.3)
     spc[5] = creditor_data["name"]
-    spc[6] = creditor_data["address1"]
-    spc[7] = creditor_data["address2"]
-    spc[8] = ""
-    spc[9] = ""
-    spc[10] = "CH"
+    spc[6] = creditor_data["street"]
+    spc[7] = creditor_data["house_number"]
+    spc[8] = creditor_data["postal_code"]
+    spc[9] = creditor_data["town"]
+    spc[10] = creditor_data["country"]
     spc[11] = ""
     spc[12] = ""
     spc[13] = ""
@@ -411,13 +417,13 @@ def gen_qr_data():
     spc[17] = ""
     spc[18] = str(invoice_data["totalamount"])
     spc[19] = invoice_data["invoice"]["currency"]
-    spc[20] = "K"
+    spc[20] = "S"
     spc[21] = debtor_data["name"]
-    spc[22] = debtor_data["address1"]
-    spc[23] = debtor_data["address2"]
-    spc[24] = ""
-    spc[25] = ""
-    spc[26] = "CH"
+    spc[22] = debtor_data["street"]
+    spc[23] = debtor_data["house_number"]
+    spc[24] = debtor_data["postal_code"]
+    spc[25] = debtor_data["town"]
+    spc[26] = debtor_data["country"]
     spc[27] = invoice_data["invoice"]["ref_type"] 
     spc[28] = invoice_data["invoice"]["reference"].replace(" ", "")
     spc[29] = invoice_data["invoice"]["information"]
@@ -462,10 +468,13 @@ def main(debug_mode):
     assert(len(invoice_data["invoice"]["information"]) < 140)
     assert(invoice_data["invoice"]["currency"] == "CHF" or invoice_data["invoice"]["currency"] == "EUR")
     
-    assert(len(debtor_data["address1"]) <= 70)
-    assert(len(debtor_data["address2"]) <= 70)
-    assert(len(creditor_data["address1"]) <= 70)
-    assert(len(creditor_data["address1"]) <= 70)
+    for party in (debtor_data, creditor_data):
+        assert(len(party["name"]) <= 70)
+        assert(len(party["street"]) <= 70)
+        assert(len(party["house_number"]) <= 16)
+        assert(0 < len(party["postal_code"]) <= 16)
+        assert(0 < len(party["town"]) <= 35)
+        assert(len(party["country"]) == 2)
 
     ps = cairo.PDFSurface(output_path, page_width, page_height)
     cr = cairo.Context(ps)
@@ -517,29 +526,32 @@ if __name__ == "__main__":
     
     with open("Languages/" + args["language"]+".json") as json_language:
         language_data = json.load(json_language)
-    
+
+    creditor_data.setdefault("country", "CH")
+    debtor_data.setdefault("country", "CH")
+
     if len(debtor_data["name"]) >= 30:
         x = debtor_data["name"][30:].split(" ",1)
         debtor_data["l1"] = debtor_data["name"][:30]+x[0]
         debtor_data["l2"] = x[1]
-        debtor_data["l3"] = debtor_data["address1"]
-        debtor_data["l4"] = debtor_data["address2"]
+        debtor_data["l3"] = street_line(debtor_data)
+        debtor_data["l4"] = town_line(debtor_data)
     else:
         debtor_data["l1"] = debtor_data["name"]
-        debtor_data["l2"] = debtor_data["address1"]
-        debtor_data["l3"] = debtor_data["address2"]
+        debtor_data["l2"] = street_line(debtor_data)
+        debtor_data["l3"] = town_line(debtor_data)
         debtor_data["l4"] = ""
 
     if len(creditor_data["name"]) >= 30:
         x = creditor_data["name"][30:].split(" ",1)
         creditor_data["l1"] = creditor_data["name"][:30]+x[0]
         creditor_data["l2"] = x[1]
-        creditor_data["l3"] = creditor_data["address1"]
-        creditor_data["l4"] = creditor_data["address2"]
+        creditor_data["l3"] = street_line(creditor_data)
+        creditor_data["l4"] = town_line(creditor_data)
     else:
         creditor_data["l1"] = creditor_data["name"]
-        creditor_data["l2"] = creditor_data["address1"]
-        creditor_data["l3"] = creditor_data["address2"]
+        creditor_data["l2"] = street_line(creditor_data)
+        creditor_data["l3"] = town_line(creditor_data)
         creditor_data["l4"] = ""
 
     main(args["debug"])

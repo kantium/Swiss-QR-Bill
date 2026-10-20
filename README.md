@@ -29,6 +29,8 @@ git fetch
 
 Three JSON files need to be customized for your needs, these files are located in the `Creditors`, `Debtors` and `Invoices` folders. 
 
+Creditor and debtor addresses are structured (address type `S`, required by the Swiss QR Code since Implementation Guidelines v2.3). Use the fields `street`, `house_number`, `postal_code`, `town` and `country` (optional, 2-letter ISO code, defaults to `CH`).
+
 
 ## Usage
 
@@ -42,7 +44,7 @@ Three JSON files need to be customized for your needs, these files are located i
 - [x] Languages (FR/EN)
 - [x] Without Reference number (NON)
 - [x] With Reference number (QRR)
-- [ ] Structured Address
+- [x] Structured Address
 - [ ] IBAN and Reference number checksum
 - [ ] German translation
 - [ ] ISO Country Code check
