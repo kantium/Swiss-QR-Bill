@@ -29,7 +29,21 @@ git fetch
 
 Three JSON files need to be customized for your needs, these files are located in the `Creditors`, `Debtors` and `Invoices` folders. 
 
-Creditor and debtor addresses are structured (address type `S`, required by the Swiss QR Code since Implementation Guidelines v2.3). Use the fields `street`, `house_number`, `postal_code`, `town` and `country` (optional, 2-letter ISO code, defaults to `CH`).
+Creditor and debtor addresses are structured (address type `S`, required by the Swiss QR Code since Implementation Guidelines v2.3). Use the fields `street`, `house_number`, `postal_code`, `town` and `country` (optional, 2-letter ISO 3166-1 code such as `CH` or `LI`, defaults to `CH`).
+
+```json
+"street":       "Rue du Lac",
+"house_number": "1268",
+"postal_code":  "2501",
+"town":         "Biel",
+"country":      "CH"
+```
+
+- `postal_code` and `town` are mandatory, `street` and `house_number` can be left empty (`""`).
+- `postal_code` is the number only (`2501`, not `CH-2501`).
+- `country` is converted to uppercase and must be exactly two letters (`Switzerland` is rejected).
+
+The invoice `information` (unstructured message) is limited to 140 characters.
 
 
 ## Usage
@@ -76,4 +90,6 @@ options:
 ## Contributing
 
 You are welcome to help by openning an issue or proposing changes
+
+Thanks to [Tiralka](https://github.com/Tiralka) for switching the Swiss QR Code to structured addresses (type `S`), required since the SIX Implementation Guidelines v2.3.
 

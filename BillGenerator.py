@@ -3,6 +3,7 @@
 import cairo
 import math
 import json
+import re
 
 import qrcode
 import argparse
@@ -415,7 +416,7 @@ def gen_qr_data():
     spc[15] = ""
     spc[16] = ""
     spc[17] = ""
-    spc[18] = str(invoice_data["totalamount"])
+    spc[18] = "{:.2f}".format(invoice_data["totalamount"]) # always two decimals, e.g. 64.90
     spc[19] = invoice_data["invoice"]["currency"]
     spc[20] = "S"
     spc[21] = debtor_data["name"]
@@ -465,7 +466,7 @@ def main(debug_mode):
     invoice_data["duedate"] = date.today() + timedelta(days=invoice_data["invoice"]["duedays"])
     invoice_data["duedatetxt"] = date.strftime(invoice_data["duedate"], "%d.%m.%y")
     
-    assert(len(invoice_data["invoice"]["information"]) < 140)
+    assert(len(invoice_data["invoice"]["information"]) <= 140)
     assert(invoice_data["invoice"]["currency"] == "CHF" or invoice_data["invoice"]["currency"] == "EUR")
     
     for party in (debtor_data, creditor_data):
@@ -474,7 +475,7 @@ def main(debug_mode):
         assert(len(party["house_number"]) <= 16)
         assert(0 < len(party["postal_code"]) <= 16)
         assert(0 < len(party["town"]) <= 35)
-        assert(len(party["country"]) == 2)
+        assert(re.fullmatch("[A-Z]{2}", party["country"])) # ISO 3166-1 alpha-2, e.g. CH
 
     ps = cairo.PDFSurface(output_path, page_width, page_height)
     cr = cairo.Context(ps)
@@ -527,8 +528,8 @@ if __name__ == "__main__":
     with open("Languages/" + args["language"]+".json") as json_language:
         language_data = json.load(json_language)
 
-    creditor_data.setdefault("country", "CH")
-    debtor_data.setdefault("country", "CH")
+    for party in (creditor_data, debtor_data):
+        party["country"] = party.get("country", "CH").strip().upper()
 
     if len(debtor_data["name"]) >= 30:
         x = debtor_data["name"][30:].split(" ",1)
